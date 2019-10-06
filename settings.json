@@ -1,0 +1,10 @@
+{
+    "databases":[
+        {
+            "user":"test",
+            "password": "test",
+            "server": "localhost",
+            "database": "example"
+        }
+    ]
+}
