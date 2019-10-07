@@ -1,10 +1,20 @@
 {
     "databases":[
+        " ** CONNECTION STRING ** ",
+        " ** CONNECTION STRING ** "
+    ],
+    "object_types":[
+        "U", "V", "P"
+        Read more on object types at https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-objects-transact-sql?view=sql-server-2017
+    ],
+    "sql_cols":[
         {
-            "user": "test",
-            "password": "test",
-            "server": "25.12.2.138",
-            "database": "example"
+            "id":"name",
+            "desc":"Name"
+        }
+        {
+            "id":"type_desc",
+            "desc":"Type"
         }
     ]
 }
