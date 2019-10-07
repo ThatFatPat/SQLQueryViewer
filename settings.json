@@ -3,7 +3,7 @@
         {
             "user":"test",
             "password": "test",
-            "server": "localhost",
+            "server": "25.12.2.138",
             "database": "example"
         }
     ]
