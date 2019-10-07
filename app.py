@@ -7,21 +7,20 @@ settings = None
 
 app = Flask(__name__)
 
-class Item(object):
-    def __init__(self, name, type, server, description):
-        self.name = name
-        self.type = type
-        self.server = server
-        self.description = description
-
-# Or, equivalently, some dicts
-items = [dict(name='Name1', type='Type', server='Server', description='Description1'),
-         dict(name='Name2', type='Type', server='Server', description='Description2'),
-         dict(name='Name3', type='Type', server='Server', description='Description3')]
 
 columns = ["name", "type", "server", "description"]
+
+
 sql_cols = ('name', 'type_desc', )
+
+sql_cols = ','.join(map(str, sql_cols)) # Join sql-cols to a comma-seperated string.
+
+
 types = ('U', 'V', 'P', )
+
+types = "',N'".join(map(str, types)) # Join types to a comma-seperated string.
+types = "(N'" + types + "')"
+# Output format is "N'U',N'V',N'P'"
 
 def getItemsFromSQL():
     for database in settings["databases"]:
@@ -30,7 +29,12 @@ def getItemsFromSQL():
         cursor = conn.cursor()
         cursor.execute("SELECT @@SERVERNAME")
         servername = cursor.fetchone()[0]
-        cursor.execute('SELECT ? FROM sys.objects ?', (sql_cols, types, ))
+
+        # Note: This code is bad form! Please avoid using format strings for queries.
+        # Prefer using the builtin paramter method that performs sanitization in order to avoid SQL Injection attacks.
+        # In this specific case it proved necessary. This use case is tolerated because the parameters are not user input that has to be sanitized.
+        cursor.execute('SELECT {} FROM sys.objects WHERE type IN {}'.format(sql_cols, types))
+
         rows = cursor.fetchall()
         list_rows = [list(row) for row in rows]
         for row in list_rows:
