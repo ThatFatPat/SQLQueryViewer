@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request
+import pyodbc
 import json
-import pyodbc 
-
-
-settings = None
 
 app = Flask(__name__)
+wsgi_app = app.wsgi_app
 
+settings = None
+with open('./settings.json') as settings_file:
+    settings = json.loads(settings_file.read())
 
 columns = ["name", "type", "server", "description"]
 
@@ -21,6 +22,7 @@ types = ('U', 'V', 'P', )
 types = "',N'".join(map(str, types)) # Join types to a comma-seperated string.
 types = "(N'" + types + "')"
 # Output format is "N'U',N'V',N'P'"
+
 
 def getItemsFromSQL():
     for database in settings["databases"]:
@@ -48,7 +50,5 @@ def getItemsFromSQL():
 def displayTable():
     return render_template('index.html', items=getItemsFromSQL())
 
-if __name__ == '__main__':
-    with open('./settings.json') as settings_file:
-        settings = json.loads(settings_file.read())
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
