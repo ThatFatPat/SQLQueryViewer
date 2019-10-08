@@ -10,39 +10,44 @@ settings = None
 with open('./settings.json') as settings_file:
     settings = json.loads(settings_file.read())
 
-column_names = [col["desc"] for col in settings["sql_cols"] + settings["extend_cols"]]
-sql_col_names = [col["desc"] for col in settings["sql_cols"]]
+
+column_names = ["Name"]
+column_names.extend([col["desc"] for col in settings["sql_cols"] + settings["extend_cols"]])
+
+sql_col_names = ["Name"]
+sql_col_names.extend([col["desc"] for col in settings["sql_cols"]])
+
 extended_col_names = [col["desc"] for col in settings["extend_cols"]]
-sql_cols = ','.join(map(str, [col["id"] for col in settings["sql_cols"]])) # Join sql-cols to a comma-seperated string.
+
+name_col_selector = '''CASE 
+                            WHEN sys.objects.parent_object_id>0 THEN OBJECT_SCHEMA_NAME(sys.objects.parent_object_id)+ '.'+OBJECT_NAME(sys.objects.parent_object_id)+'.'+sys.objects.name
+                            ELSE OBJECT_SCHEMA_NAME(sys.objects.object_id)+'.'+sys.objects.name
+                       END
+                       AS name'''
+sql_cols = name_col_selector
+sql_cols = sql_cols + ',' + ','.join(map(str, [col["id"] for col in settings["sql_cols"]])) # Join sql-cols to a comma-seperated string.
+
 extended_cols = settings["extend_cols"]
 types = "',N'".join(map(str, settings["object_types"])) # Join types to a comma-seperated string.
 types = "(N'" + types + "')" # Output format is "N'U',N'V',N'P'"
 
 def getExtendedProperty(cursor, property):
-    query = '''SELECT
- CASE WHEN ob.parent_object_id>0 
- THEN OBJECT_SCHEMA_NAME(ob.parent_object_id)
- + '.'+OBJECT_NAME(ob.parent_object_id)+'.'+ob.name 
- ELSE OBJECT_SCHEMA_NAME(ob.object_id)+'.'+ob.name END AS path,
- value
- FROM sys.extended_properties ep
- inner join sys.objects ob ON ep.major_id=ob.OBJECT_ID AND class=1
- WHERE ep.name = '{}'
-'''.format(property)
+    query = "SELECT " + name_col_selector + ''', value
+            FROM sys.extended_properties
+            INNER JOIN sys.objects ON sys.extended_properties.major_id=sys.objects.OBJECT_ID AND class=1
+            WHERE sys.extended_properties.name = '{}' '''.format(property)
     cursor.execute(query)
     return cursor.fetchall()
 
 def getItemsFromSQL():
     for database in settings["databases"]:
-        connection_string = database # Databases are stored in Connection String form.
-        #conn = sql.connect(connection_string)
         conn = sql.connect(server="sql5045.site4now.net", database="DB_A4E964_MSSQL", user="DB_A4E964_MSSQL_admin", password="ZP21ya10")
         cursor = conn.cursor()
 
         # Note: This code is bad form! Please avoid using format strings for queries.
         # Prefer using the builtin paramter method that performs sanitization in order to avoid SQL Injection attacks.
         # In this specific case it proved necessary. This use case is tolerated because the parameters are not user input that has to be sanitized.
-        cursor.execute('SELECT {} FROM sys.objects ob WHERE type IN {} AND is_ms_shipped = 0'.format(sql_cols, types))
+        cursor.execute('SELECT {} FROM sys.objects WHERE type IN {} AND is_ms_shipped = 0'.format(sql_cols, types))
 
         rows = cursor.fetchall()
         dict_rows = [dict(zip(sql_col_names, list(row))) for row in rows]
@@ -54,7 +59,6 @@ def getItemsFromSQL():
                 else:
                     row[prop_dict["col"]] = ""
         conn.close()
-        print(dict_rows)
     return dict_rows
 
 @app.route('/')

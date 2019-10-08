@@ -5,16 +5,19 @@
     ],
     "object_types":[
         "U", "V", "P"
-        Read more on object types at https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-objects-transact-sql?view=sql-server-2017
+        //Read more on object types at https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-objects-transact-sql?view=sql-server-2017
     ],
     "sql_cols":[
-        {
-            "id":"name",
-            "desc":"Name"
-        }
+        // Name column is first and is selected by default. This can only be changed in the code. See name_col_selector.
         {
             "id":"type_desc",
             "desc":"Type"
+        }
+    ],
+    "extend_cols":[
+        {
+            "id": "MS_Description",
+            "desc": "Description"
         }
     ]
 }
