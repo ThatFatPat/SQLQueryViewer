@@ -1,0 +1,10 @@
+1. Download and install Python 3.7.4
+2. `pip install virtualenvwrapper-win`
+3. Set WORKON_HOME environment variable before running the next step to choose where the virtualenv will be created. The path will be: %WORKON_HOME%\ENV_NAME
+4. Run `mkvirtualenv ENV_NAME`
+Note: From now on we will be working inside the virtualenv we created. To get back to it after exiting (Either using `deactivate` or exiting the terminal), use `workon ENV_NAME`
+5. `pip install -r requirements.txt`
+6. `wfastcgi-enable`
+Note: This will add a few configuration lines to applicationHost.config to allow running FastCGI apps.
+7. Create a web.config (Follow the example file)
+8. Create a settings.json (Follow the example file)

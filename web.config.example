@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+    <handlers>
+      <add name="PythonHandler" path="*" verb="*" modules="FastCgiModule" scriptProcessor='OUTPUT FROM wfastcgi-enable in this format: "c:\path\to\virtual\python.exe|c:\path\to\virtual\wfastcgi.py" ' resourceType="Unspecified" requireAccess="Script" />
+    </handlers>
+  </system.webServer>
+  <appSettings>
+    <add key="PYTHONPATH" value="C:\path\to\virtual\python.exe" />
+    <add key="WSGI_HANDLER" value="FlaskWeb.app" />
+    <add key="WSGI_LOG" value="C:\path\to\log.log" />
+  </appSettings>
+</configuration>
