@@ -43,7 +43,10 @@ def getExtendedProperty(conn, property):
 
 def getItemsFromSQL():
     for database in settings["databases"]:
-        conn = sql.connect(database)
+        try:
+            conn = sql.connect(database)
+        except:
+            continue
         cursor = conn.cursor()
 
         # Note: This code is bad form! Please avoid using format strings for queries.
