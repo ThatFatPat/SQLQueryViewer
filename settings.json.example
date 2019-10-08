@@ -1,6 +1,6 @@
 {
     "databases":[
-        " ** CONNECTION STRING ** ",
+        " ** CONNECTION STRING ** ", (Make sure to specify a `Driver` for ODBC to work)
         " ** CONNECTION STRING ** "
         // IMPORTANT: Listing connection strings here leaves security details out in the open.
         // In order to avoid credentials getting leaked, please DENY PERMISSIONS to this file to anyone but the administrator and the IIS user of the application.
