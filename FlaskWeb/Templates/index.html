@@ -13,20 +13,16 @@
   <body>
       <table class="table" id="queryTable" data-toggle="table">
         <thead>
-          <tr>
-            <th data-field="name">Name</th>
-            <th data-field="type">Type</th>
-            <th data-field="server">Server</th>
-            <th data-field="description">Description</th>
-          </tr>
+          {% for col in columns %}
+            <th>{{ col }}</th>
+          {% endfor %}
         </thead>
         <tbody>
           {% for item in items %}
             <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ item.type }}</td>
-              <td>{{ item.server }}</td>
-              <td>{{ item.description }}</td>
+            {% for col in columns %}
+              <td>{{ item[col] }}</td>
+            {% endfor %}
             </tr>
           {% endfor %}
         </tbody>
