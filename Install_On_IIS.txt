@@ -1,15 +1,17 @@
-1. Download and install Python 3.7.4
+1. Download and install Python 3.7.4.
 2. `pip install virtualenvwrapper-win`
-3. Set WORKON_HOME environment variable before running the next step to choose where the virtualenv will be created. The path will be: %WORKON_HOME%\ENV_NAME
+3. Set WORKON_HOME environment variable before running the next step to choose where the virtualenv will be created. The path will be: %WORKON_HOME%\ENV_NAME.
 4. Run `mkvirtualenv ENV_NAME`
-Note: From now on we will be working inside the virtualenv we created. To get back to it after exiting (Either using `deactivate` or exiting the terminal), use `workon ENV_NAME`
+Note: From now on we will be working inside the virtualenv we created. To get back to it after exiting (Either using `deactivate` or exiting the terminal), use `workon ENV_NAME`.
 5. `pip install -r requirements.txt`
 6. `wfastcgi-enable`
 Note: This will add a few configuration lines to applicationHost.config to allow running FastCGI apps.
 7. Create site in IIS
 8. In `Feature Delegation`, allow Read/Write access to Handler Mappings to the newly created site.
-9. Change authentication method of site from Anonymus to Application Pool Identity
+9. Change authentication method of site from Anonymus to Application Pool Identity.
 10. Add Read/Write permissions on the application source folder to the application pool user.
-11. Create a web.config (Follow the example file)
-12. Create a settings.json (Follow the example file)
+11. Create a web.config. (Follow the example file)
+12. Create a settings.json. (Follow the example file)
 13. Set permissions on settings.json to only allow access to administrator and the IIS user for the application.
+14. Add IIS APPOOL\APPNAME user to SQL Server users database.
+15. Grant permissions to the user such that it can SELECT sys.objects. (The only way I got this to work was by granting sysadmin. There may be other ways)
