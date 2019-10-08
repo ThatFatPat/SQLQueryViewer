@@ -15,6 +15,10 @@
         {
             "id":"type_desc",
             "desc":"Type"
+        },
+        {
+            "id":"@@SERVERNAME",
+            "desc":"Server"
         }
     ],
     "extend_cols":[
