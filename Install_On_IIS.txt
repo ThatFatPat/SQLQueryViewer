@@ -6,5 +6,10 @@ Note: From now on we will be working inside the virtualenv we created. To get ba
 5. `pip install -r requirements.txt`
 6. `wfastcgi-enable`
 Note: This will add a few configuration lines to applicationHost.config to allow running FastCGI apps.
-7. Create a web.config (Follow the example file)
-8. Create a settings.json (Follow the example file)
+7. Create site in IIS
+8. In `Feature Delegation`, allow Read/Write access to Handler Mappings to the newly created site.
+9. Change authentication method of site from Anonymus to Application Pool Identity
+10. Add Read/Write permissions on the application source folder to the application pool user.
+11. Create a web.config (Follow the example file)
+12. Create a settings.json (Follow the example file)
+13. Set permissions on settings.json to only allow access to administrator and the IIS user for the application.
