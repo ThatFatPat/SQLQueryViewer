@@ -54,11 +54,11 @@ def getExtendedProperty(conn, property):
         raise e
 
 def getItemsFromSQL():
-    for database in settings["databases"]:
+    for i, database in enumerate(settings["databases"]):
         try:
             conn = sql.connect(database)
         except Exception as e:
-            app.logger.error("ERROR While connecting to a database: {}".format(str(e)))
+            app.logger.error("ERROR While connecting to databases[{}]: {}".format(i, str(e)))
             continue
         cursor = conn.cursor()
 
