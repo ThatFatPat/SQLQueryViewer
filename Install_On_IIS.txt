@@ -13,5 +13,5 @@ Note: This will add a few configuration lines to applicationHost.config to allow
 11. Create a web.config. (Follow the example file)
 12. Create a settings.json. (Follow the example file)
 13. Set permissions on settings.json to only allow access to administrator and the IIS user for the application.
-14. Add IIS APPOOL\APPNAME user to SQL Server users database.
+14. Add IIS APPOOL\APPNAME user to SQL Server users database. // If Trusted_connection=yes in connection string
 15. Grant permissions to the user such that it can SELECT sys.objects. (The only way I got this to work was by granting sysadmin. There may be other ways)
