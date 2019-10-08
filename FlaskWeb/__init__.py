@@ -1,15 +1,23 @@
 from flask import Flask, render_template, request
+import logging
+from logging import FileHandler
 import pyodbc as sql
 import hashlib
 import json
 
 app = Flask(__name__)
-wsgi_app = app.wsgi_app
 
-settings = None
-with open('./settings.json') as settings_file:
-    settings = json.loads(settings_file.read())
+logger = FileHandler('./error.log')
+logger.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
+app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(logger)
 
+try:
+    settings = None
+    with open('./settings.json') as settings_file:
+        settings = json.loads(settings_file.read())
+except Exception as e:
+    app.logger.error("ERROR While reading and parsing settings.json: {}".format(str(e)))
 
 column_names = ["Name"]
 column_names.extend([col["desc"] for col in settings["sql_cols"] + settings["extend_cols"]])
@@ -38,14 +46,19 @@ def getExtendedProperty(conn, property):
             WHERE sys.extended_properties.name = '{}' '''.format(property)
     conn.add_output_converter(-150, lambda x: x.decode('utf-8')) # Handle binary string coming from extended_properties.
     cursor = conn.cursor()
-    cursor.execute(query)
-    return cursor.fetchall()
+    try:
+        cursor.execute(query)
+        return cursor.fetchall()
+    except Exception as e:
+        app.logger.error("ERROR While getting extended properties: {}".format(str(e)))
+        raise e
 
 def getItemsFromSQL():
     for database in settings["databases"]:
         try:
             conn = sql.connect(database)
-        except:
+        except Exception as e:
+            app.logger.error("ERROR While connecting to a database: {}".format(str(e)))
             continue
         cursor = conn.cursor()
 
