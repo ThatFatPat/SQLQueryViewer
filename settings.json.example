@@ -5,6 +5,7 @@
     ],
     "object_types":[
         "U", "V", "P"
+        // Note: Not all levels are supported. Level 0 objects will work. Level 1 maybe. Level 2 will probably not work.
         //Read more on object types at https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-objects-transact-sql?view=sql-server-2017
     ],
     "sql_cols":[
