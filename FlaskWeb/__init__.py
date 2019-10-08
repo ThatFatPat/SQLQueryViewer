@@ -54,9 +54,10 @@ def getExtendedProperty(conn, property):
         raise e
 
 def getItemsFromSQL():
+    ret = []
     for i, database in enumerate(settings["databases"]):
         try:
-            conn = sql.connect(database)
+            conn = sql.connect(database, timeout=settings["timeout"])
         except Exception as e:
             app.logger.error("ERROR While connecting to databases[{}]: {}".format(i, str(e)))
             continue
@@ -76,8 +77,9 @@ def getItemsFromSQL():
                     row[prop_dict["col"]] = prop_dict["dict"][row["Name"]]
                 else:
                     row[prop_dict["col"]] = ""
+        ret.extend(dict_rows)
         conn.close()
-    return dict_rows
+    return ret
 
 @app.route('/')
 def displayTable():

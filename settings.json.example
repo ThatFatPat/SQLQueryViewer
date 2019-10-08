@@ -22,5 +22,6 @@
             "id": "MS_Description",
             "desc": "Description"
         }
-    ]
+    ],
+    "timeout": 5 // Timeout for connecting to the databases
 }
