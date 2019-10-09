@@ -41,7 +41,9 @@
       $(document).ready(function () {
         $('#queryTable').DataTable({
           paging: false,
-          info: false
+          info: false,
+          dom: "<<'col-sm-12 col-md-6'f>" +
+               "<'row'<'col-sm-12'tr>>"
         });
       });
     </script>
