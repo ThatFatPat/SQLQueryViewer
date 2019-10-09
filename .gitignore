@@ -5,3 +5,4 @@ settings.json
 .vscode
 *.log
 *.config
+.DS_Store
