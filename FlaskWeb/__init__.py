@@ -19,6 +19,10 @@ try:
 except Exception as e:
     app.logger.error("ERROR While reading and parsing settings.json: {}".format(str(e)))
 
+
+# Note: Name will be added first by default! This is to allow matching extended_properties to items. 
+# This should probably be done using id, but I did not have the ability to implement this at the time of writing.
+
 column_names = ["Name"]
 column_names.extend([col["desc"] for col in settings["sql_cols"] + settings["extend_cols"]])
 
@@ -84,6 +88,3 @@ def getItemsFromSQL():
 @app.route('/')
 def displayTable():
     return render_template('index.html', items=getItemsFromSQL(), columns=sql_col_names + extended_col_names)
-
-# if __name__ == '__main__':
-#     app.run()
